@@ -1,0 +1,11 @@
+---
+# ------------------------------------------------------------------------
+# handlers file for deployment_user
+# ------------------------------------------------------------------------
+
+- name: restart deployment_user
+  service:
+    name: "{{ deployment_user_service }}"
+    state: restarted
+  when:
+    - ansible_virtualization_type != "docker"

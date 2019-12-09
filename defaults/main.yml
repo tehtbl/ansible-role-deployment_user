@@ -1,0 +1,40 @@
+---
+# ------------------------------------------------------------------------
+# defaults file for deployment_user
+# ------------------------------------------------------------------------
+
+# Set deployment user
+deployment_user_usr: userone
+
+# Set groups to be assigned deployment user for
+deployment_user_grps:
+  - sudo
+  - admins
+
+# Public ssh keys for deployment user's authorized keys
+deployment_user_authorized_keys:
+  - state: present
+    key: "ssh-rsa XXX comment"
+
+# Sudo commands a deployment user can run
+deployment_user_sudoers_commands:
+  - /bin/dmesg
+  - /sbin/reboot
+  - /sbin/poweroff
+  - /usr/bin/apt update
+  - /usr/bin/apt upgrade
+  - /usr/bin/apt autoclean
+  - /usr/bin/apt autoremove
+  - /usr/bin/apt-get update
+  - /usr/bin/apt-get upgrade
+  - /usr/bin/apt-get autoclean
+  - /usr/bin/apt-get autoremove
+  - /usr/bin/lsof -Pni
+  - /usr/bin/tail -f /var/log/syslog
+  - /usr/sbin/ntpdate -uv *
+
+# Re-new sshd server keys
+deployment_user_sshd_renew_keys: true
+
+# copy issue.net
+deployment_user_copy_issue_net: false

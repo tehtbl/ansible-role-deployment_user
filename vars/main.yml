@@ -1,0 +1,10 @@
+---
+# ------------------------------------------------------------------------
+# vars file for deployment_user
+# ------------------------------------------------------------------------
+
+_deployment_user_packages:
+  default:
+    - deployment_user
+
+deployment_user_packages: "{{ _deployment_user_packages[ansible_os_family] | default(_deployment_user_packages['default']) }}"

@@ -1,0 +1,19 @@
+#
+# Examples:
+#
+
+#Host 123
+#    Hostname example.org
+#    User tunnel
+#    IdentityFile ~/.ssh/id_doku
+#    LocalForward 127.0.0.1:1080 127.0.0.1:80
+
+#Host 456
+#    Hostname example.org
+#    ProxyCommand ssh -W %h:%p jumphost
+
+Host *
+  ForwardAgent yes
+  StrictHostKeyChecking no
+  ServerAliveInterval 120
+  IdentityFile ~/.ssh/id_rsa
