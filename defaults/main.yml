@@ -11,10 +11,8 @@ deployment_user_grps:
   - sudo
   - admins
 
-# Public ssh keys for deployment user's authorized keys
-deployment_user_authorized_keys:
-  - state: present
-    key: "ssh-rsa XXX comment"
+# Sudo commands a deployment user can run
+deployment_user_sudoers_general_no_password: false
 
 # Sudo commands a deployment user can run
 deployment_user_sudoers_commands:
@@ -32,9 +30,3 @@ deployment_user_sudoers_commands:
   - /usr/bin/lsof -Pni
   - /usr/bin/tail -f /var/log/syslog
   - /usr/sbin/ntpdate -uv *
-
-# Re-new sshd server keys
-deployment_user_sshd_renew_keys: true
-
-# copy issue.net
-deployment_user_copy_issue_net: false
