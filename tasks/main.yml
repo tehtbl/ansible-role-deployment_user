@@ -3,65 +3,19 @@
 # tasks file for deployment_user
 # ------------------------------------------------------------------------
 
-# - name: install deployment_user
-#   package:
-#     name: "{{ deployment_user_packages }}"
-#     state: present
-#   register: deployment_user_install_deployment_user
-#   until: deployment_user_install_deployment_user is succeeded
-#   retries: 3
-#
-# - name: configure deployment_user
-#   template:
-#     src: "{{ deployment_user_config_file }}.j2"
-#     dest: "{{ deployment_user_config_directory }}/{{ deployment_user_config_file }}"
-#   notify:
-#     - restart deployment_user
-#
-# - name: start and enable deployment_user
-#   service:
-#     name: "{{ deployment_user_service }}"
-#     state: started
-#     enabled: true
-#   when:
-#     - ansible_virtualization_type != "docker"
-
-
-
-
-# ------------------------------------------------------------------------
-# deployment user
-# ------------------------------------------------------------------------
 - name: check for sudo and admin groups
   group: name="{{ item }}" state=present system=yes
   with_items:
-    - sudo
-    - admins
+    - "{{ deployment_user_grps }}"
 
 - name: check for deploy user
   user:
-    name: "{{ srv_init_deploy_user.name }}"
+    name: "{{ deployment_user_name }}"
     comment: "deploy"
-    groups: "sudo,admins"
-    password: "{{ srv_init_deploy_user.password }}"
+    # groups: "sudo,admins" TODO
+    # password: "{{ srv_init_deploy_user.password }}" TODO
     shell: "/bin/bash"
     state: present
-
-- name: deploy ssh public keys for deploy user
-  authorized_key:
-    user: "{{ ansible_ssh_user }}"
-    key: "{{ item.key }}"
-    state: "{{ item.state | default("absent") }}"
-  with_items:
-    - "{{ srv_init_deploy_user.ssh_keys }}"
-
-- name: deploy ssh public keys for admin user
-  authorized_key:
-    user: "{{ srv_init_admin_user.name }}"
-    key: "{{ item.key }}"
-    state: "{{ item.state }}"
-  with_items:
-    - "{{ srv_init_admin_user.ssh_keys }}"
 
 - name: copy ssh user config
   copy:
@@ -71,14 +25,12 @@
     src: ssh_config
     dest: "~{{ item }}/.ssh/config"
   with_items:
-    - "{{ srv_init_deploy_user.name }}"
-    # - "{{ srv_init_admin_user.name }}"
-    # - "root"
+    - "{{ deployment_user_name }}"
 
-- name: copy sudoers file
-  copy:
-    owner: root
-    group: root
-    src: sudoers
+- name: configure sudoers file
+  template:
+    src: "sudoers.j2"
     dest: "/etc/sudoers"
-    mode: 0440
+    owner: "root"
+    group: "root"
+    mode: "0440"

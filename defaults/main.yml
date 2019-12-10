@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------
 
 # Set deployment user
-deployment_user_usr: userone
+deployment_user_name: userone
 
 # Set groups to be assigned deployment user for
 deployment_user_grps:
@@ -17,8 +17,6 @@ deployment_user_sudoers_general_no_password: false
 # Sudo commands a deployment user can run
 deployment_user_sudoers_commands:
   - /bin/dmesg
-  - /sbin/reboot
-  - /sbin/poweroff
   - /usr/bin/apt update
   - /usr/bin/apt upgrade
   - /usr/bin/apt autoclean
