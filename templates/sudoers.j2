@@ -2,9 +2,17 @@ Defaults        env_reset
 Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 root ALL=(ALL:ALL) ALL
-%sudo ALL=(ALL:ALL) ALL
 
-Cmnd_Alias NP = {% for c in deployment_user_sudoers_commands %}{{ c }}, {% endfor %}/sbin/poweroff, /sbin/reboot
+{% for g in deployment_user_grps %}
+%{{ g }} ALL=(ALL:ALL) ALL
+{% endfor %}
 
-#admins  ALL=(ALL) NOPASSWD:ALL
-%admins  ALL=(ALL) NOPASSWD:NP
+Cmnd_Alias NP = {{ deployment_user_sudoers_commands | join(', ') }}
+
+{% for g in deployment_user_grps %}
+{% if deployment_user_sudo_wo_password %}
+%{{ g }} ALL=(ALL) NOPASSWD:ALL
+{% else %}
+%{{ g }} ALL=(ALL) NOPASSWD:NP
+{% endif %}
+{% endfor %}

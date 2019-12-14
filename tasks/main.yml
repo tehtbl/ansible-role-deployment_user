@@ -4,30 +4,40 @@
 # ------------------------------------------------------------------------
 
 - name: check for sudo and admin groups
-  group: name="{{ item }}" state=present system=yes
+  group:
+    name: "{{ item }}"
+    state: present
+    system: true
   with_items:
     - "{{ deployment_user_grps }}"
 
-- name: check for deploy user
+- name: check for deployment user, leave password as it is
   user:
     name: "{{ deployment_user_name }}"
-    comment: "deploy"
-    # groups: "sudo,admins" TODO
-    # password: "{{ srv_init_deploy_user.password }}" TODO
+    comment: "deployment user"
+    groups: "{{ deployment_user_grps | join(',') }}"
     shell: "/bin/bash"
     state: present
 
-- name: copy ssh user config
-  copy:
-    owner: "{{ item }}"
-    group: "{{ item }}"
-    mode: 0640
-    src: ssh_config
-    dest: "~{{ item }}/.ssh/config"
-  with_items:
-    - "{{ deployment_user_name }}"
+- name: check for deploy user, set new password
+  user:
+    name: "{{ deployment_user_name }}"
+    password: "{{ srv_init_deploy_user.password }}"
+  when:
+    - deployment_user_check_new_pw | bool
 
-# AllowUsers {% for u in ssh_server_users %}{{ u.name }} {% endfor %}
+- name: set new random password
+  set_fact:
+    my_rnd_pass: "{{ lookup('password', '/dev/urandom length=16 chars=ascii_letters') }}"
+  when:
+    - deployment_user_check_rnd_pwd | bool
+
+- name: check for deploy user, set random password
+  user:
+    name: "{{ deployment_user_name }}"
+    password: "{{ my_rnd_pass }}"
+  when:
+    - deployment_user_check_rnd_pwd | bool
 
 - name: configure sudoers file
   template:
@@ -39,8 +49,13 @@
 
 - name: deploy ssh public keys for ssh users
   authorized_key:
-    user: "{{ item.name }}"
+    user: "{{ deployment_user_name }}"
     key: "{{ item.pubkey }}"
-    state: "{{ item.state | default("absent") }}"
+    state: "{{ item.state | default('absent') }}"
   with_items:
-    - "{{ ssh_server_users }}"
+    - "{{ deployment_user_pubkeys }}"
+  notify:
+    - restart ssh server
+
+- name: Flush Handlers
+  meta: flush_handlers

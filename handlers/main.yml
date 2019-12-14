@@ -3,9 +3,9 @@
 # handlers file for deployment_user
 # ------------------------------------------------------------------------
 
-- name: restart deployment_user
+- name: restart ssh server
   service:
-    name: "{{ deployment_user_service }}"
+    name: "{{ ssh_server_service }}"
     state: restarted
   when:
     - ansible_virtualization_type != "docker"

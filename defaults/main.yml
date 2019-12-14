@@ -11,8 +11,15 @@ deployment_user_grps:
   - sudo
   - admins
 
+# Checks for password changes
+deployment_user_check_new_pw: false
+deployment_user_check_rnd_pwd: false
+
+# Password for when deployment_user_check_new_pw == True
+deployment_user_new_pw: "{{ 'password' | password_hash('sha512') }}"
+
 # Sudo commands a deployment user can run
-deployment_user_sudoers_general_no_password: false
+deployment_user_sudo_wo_password: false
 
 # Sudo commands a deployment user can run
 deployment_user_sudoers_commands:
@@ -28,8 +35,10 @@ deployment_user_sudoers_commands:
   - /usr/bin/lsof -Pni
   - /usr/bin/tail -f /var/log/syslog
   - /usr/sbin/ntpdate -uv *
+  - /sbin/poweroff
+  - /sbin/reboot
 
 # Allowed SSH public key for user
 deployment_user_pubkeys:
-  - pubkey: ssh-rsa XXX comment
+  - pubkey: ssh-rsa AAAAB3Nxxx== comment
     state: present

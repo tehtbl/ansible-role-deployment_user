@@ -18,7 +18,7 @@ galaxy_info:
         - bionic
 
   galaxy_tags:
-    - deployment_user
+    - deployment
     - installer
     - client
     - server
