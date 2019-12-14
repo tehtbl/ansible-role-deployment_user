@@ -27,6 +27,8 @@
   with_items:
     - "{{ deployment_user_name }}"
 
+# AllowUsers {% for u in ssh_server_users %}{{ u.name }} {% endfor %}
+
 - name: configure sudoers file
   template:
     src: "sudoers.j2"
@@ -34,3 +36,11 @@
     owner: "root"
     group: "root"
     mode: "0440"
+
+- name: deploy ssh public keys for ssh users
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.pubkey }}"
+    state: "{{ item.state | default("absent") }}"
+  with_items:
+    - "{{ ssh_server_users }}"

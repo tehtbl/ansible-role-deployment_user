@@ -28,3 +28,8 @@ deployment_user_sudoers_commands:
   - /usr/bin/lsof -Pni
   - /usr/bin/tail -f /var/log/syslog
   - /usr/sbin/ntpdate -uv *
+
+# Allowed SSH public key for user
+deployment_user_pubkeys:
+  - pubkey: ssh-rsa XXX comment
+    state: present
