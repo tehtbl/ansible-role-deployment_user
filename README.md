@@ -40,7 +40,7 @@ These variables are set in `defaults/main.yml`:
 # ------------------------------------------------------------------------
 
 # Set deployment user
-deployment_user_name: userone
+deployment_user_name: "{{ ansible_ssh_user }}"
 
 # Set groups to be assigned deployment user for
 deployment_user_grps:
