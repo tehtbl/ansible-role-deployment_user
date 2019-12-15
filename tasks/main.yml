@@ -9,13 +9,14 @@
     state: present
     system: true
   with_items:
+    - sudo
     - "{{ deployment_user_grps }}"
 
 - name: check for deployment user, leave password as it is
   user:
     name: "{{ deployment_user_name }}"
     comment: "deployment user"
-    groups: "{{ deployment_user_grps | join(',') }}"
+    groups: "sudo,{{ deployment_user_grps | join(',') }}"
     shell: "/bin/bash"
     state: present
 
@@ -56,6 +57,3 @@
     - "{{ deployment_user_pubkeys }}"
   notify:
     - restart ssh server
-
-- name: Flush Handlers
-  meta: flush_handlers
