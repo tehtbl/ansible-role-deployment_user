@@ -55,9 +55,3 @@
     owner: "root"
     group: "root"
     mode: "0440"
-
-- name: remove old vagrant sudoers
-  file:
-    name: "/etc/sudoers.d/vagrant"
-    state: absent
-  when: ansible_ssh_user == "vagrant"
