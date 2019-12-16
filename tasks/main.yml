@@ -40,6 +40,14 @@
   when:
     - deployment_user_check_rnd_pwd | bool
 
+- name: deploy ssh public keys for ssh users
+  authorized_key:
+    user: "{{ deployment_user_name }}"
+    key: "{{ item.pubkey }}"
+    state: "{{ item.state | default('absent') }}"
+  with_items:
+    - "{{ deployment_user_pubkeys }}"
+
 - name: configure sudoers file
   template:
     src: "sudoers.j2"
@@ -48,12 +56,8 @@
     group: "root"
     mode: "0440"
 
-- name: deploy ssh public keys for ssh users
-  authorized_key:
-    user: "{{ deployment_user_name }}"
-    key: "{{ item.pubkey }}"
-    state: "{{ item.state | default('absent') }}"
-  with_items:
-    - "{{ deployment_user_pubkeys }}"
-  notify:
-    - restart ssh server
+- name: remove old vagrant sudoers
+  file:
+    name: "/etc/sudoers.d/vagrant"
+    state: absent
+  when: ansible_ssh_user == "vagrant"
