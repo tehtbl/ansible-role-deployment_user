@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------
 
 # Set deployment user
-deployment_user_name: "{{ ansible_ssh_user }}"
+deployment_user_name: root
 
 # Set groups to be assigned deployment user for
 deployment_user_grps:
