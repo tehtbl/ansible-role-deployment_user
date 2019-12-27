@@ -1,4 +1,4 @@
 ---
 repository:
-  description: Install and configure deployment user on a system.
+  description: Install and configure a special deployment user on your system.
   homepage: https://github.com/tehtbl/ansible-role-deployment_user

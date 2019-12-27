@@ -2,7 +2,7 @@
 gid: 45338
 name: deployment_user
 desc: Install and configure a special deployment user on your system.
-reqs:
+deps:
   - tehtbl.bootstrap
   - tehtbl.ssh_server
 tags:

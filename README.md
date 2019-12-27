@@ -1,10 +1,10 @@
 <!-- get id via: ansible-galaxy info tehtbl.deployment_user | grep -i "id:" -->
-<a href="https://galaxy.ansible.com/tehtbl/deployment_user"><img src="https://img.shields.io/ansible/role/453388"/></a> <a href="https://galaxy.ansible.com/tehtbl/deployment_user"><img src="https://img.shields.io/ansible/quality/453388"/></a> <a href="https://travis-ci.org/tehtbl/ansible-role-deployment_user"><img src="https://travis-ci.org/tehtbl/ansible-role-deployment_user.svg?branch=master" alt="Build status"/></a>
+<a href="https://galaxy.ansible.com/tehtbl/deployment_user"><img src="https://img.shields.io/ansible/role/45338"/></a> <a href="https://galaxy.ansible.com/tehtbl/deployment_user"><img src="https://img.shields.io/ansible/quality/45338"/></a> <a href="https://travis-ci.org/tehtbl/ansible-role-deployment_user"><img src="https://travis-ci.org/tehtbl/ansible-role-deployment_user.svg?branch=master" alt="Build status"/></a>
 
 Role Description
 ================
 
-Install and configure deployment user on a system.
+Install and configure a special deployment user on your system.
 
 Example Playbook
 ================
@@ -13,18 +13,29 @@ This example is taken from `molecule/default/playbook.yml` and is tested on each
 
 ```yaml
 ---
-# ------------------------------------------------------------------------
-# Install and configure deployment_user
-# ------------------------------------------------------------------------
-- name: deployment_user
+- name: Converge
   hosts: all
   become: true
   gather_facts: false
 
   roles:
-    - role: tehtbl.bootstrap
-    - role: tehtbl.deployment_user
+    - tehtbl.role: deployment_user
       deployment_user_parameter: value
+
+```
+
+The machine you are running this on, may need to be prepared, I use this playbook to ensure everything is in place to let the role work.
+
+```yaml
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: false
+
+  roles:
+    - tehtbl.role: tehtbl.bootstrap
+    - tehtbl.role: tehtbl.ssh_server
 
 ```
 
@@ -40,7 +51,7 @@ These variables are set in `defaults/main.yml`:
 # ------------------------------------------------------------------------
 
 # Set deployment user
-deployment_user_name: "{{ ansible_ssh_user }}"
+deployment_user_name: root
 
 # Set groups to be assigned deployment user for
 deployment_user_grps:
@@ -84,12 +95,11 @@ Requirements
 ============
 
 - Access to a repository containing packages, likely on the internet.
-- A recent version of Ansible (Tests run on the current, previous and next release of Ansible).
+- A recent version of Ansible. (Tests run on the current, previous and next release of Ansible.)
 
 The following roles can be installed to ensure all requirements are met, using `ansible-galaxy install -r requirements.yml`:
 
 ```yaml
----
 - tehtbl.bootstrap
 - tehtbl.ssh_server
 
@@ -173,7 +183,7 @@ vagrant up
 License
 =======
 
-GNU General Public License v3.0
+MIT License
 
 Author Information
 ==================
