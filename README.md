@@ -19,8 +19,7 @@ This example is taken from `molecule/default/playbook.yml` and is tested on each
   gather_facts: false
 
   roles:
-    - tehtbl.role: deployment_user
-      deployment_user_parameter: value
+    - role: tehtbl.deployment_user
 
 ```
 
@@ -34,8 +33,8 @@ The machine you are running this on, may need to be prepared, I use this playboo
   gather_facts: false
 
   roles:
-    - tehtbl.role: tehtbl.bootstrap
-    - tehtbl.role: tehtbl.ssh_server
+    - role: tehtbl.bootstrap
+    - role: tehtbl.ssh_server
 
 ```
 

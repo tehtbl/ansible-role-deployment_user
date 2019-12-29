@@ -7,3 +7,4 @@ deps:
   - tehtbl.ssh_server
 tags:
   - deployment
+  - user

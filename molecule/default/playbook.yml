@@ -6,4 +6,3 @@
 
   roles:
     - role: deployment_user
-      deployment_user_parameter: value

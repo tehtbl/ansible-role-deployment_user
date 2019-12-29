@@ -19,6 +19,7 @@ galaxy_info:
 
   galaxy_tags:
     - deployment
+    - user
     - client
     - server
     - system
@@ -26,4 +27,7 @@ galaxy_info:
     - ubuntu
     - linux
 
-dependencies: []
+dependencies:
+  - tehtbl.bootstrap
+  - tehtbl.ssh_server
+  
